@@ -20,7 +20,7 @@ def utility_processor():
     return dict(encode_image=encode_image)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
 def home_page():
     items = Item.query.filter_by(owner=None).all()
@@ -29,7 +29,7 @@ def home_page():
     # Form for get id from card of item
     if request.method == "POST" and ('purchase_item' in request.form):
         item_id = request.form['purchase_item']
-        
+
         return redirect(url_for('item_page', item_id=item_id))
     
     # Search form for items
@@ -53,30 +53,34 @@ def cart_page():
 
 
 @app.route('/upload', methods=['POST', "GET"])
+@login_required
 def upload():
-    form = ItemForm()
-    
-    # Form for upload item by admin
-    if form.validate_on_submit():
-        description = form.description.data
-        price = form.price.data
-        pic = form.image.data
+    if current_user.status == 1:
+        form = ItemForm()
         
-        if not pic:
-            return "No pic uploaded", 400
-        
-        mimetype = pic.mimetype
-        
-        # Add item in database 
-        item = Item(description=description, price=price, image=pic.read(), mimetype=mimetype)
-        db.session.add(item)
-        db.session.commit()
-        
-        flash("Successfuly, Items was send in database", category="success")
-        
-    errors_form(form)
+        # Form for upload item by admin
+        if form.validate_on_submit():
+            description = form.description.data
+            price = form.price.data
+            pic = form.image.data
             
-    return render_template('admin/upload.html', form=form)
+            if not pic:
+                return "No pic uploaded", 400
+            
+            mimetype = pic.mimetype
+            
+            # Add item in database 
+            item = Item(description=description, price=price, image=pic.read(), mimetype=mimetype)
+            db.session.add(item)
+            db.session.commit()
+            
+            flash("Successfuly, Items was send in database", category="success")
+        
+        errors_form(form)
+              
+        return render_template('admin/upload.html', form=form)
+    
+    return redirect(url_for('home_page'))
 
 
 @app.route('/item/id=<int:item_id>', methods=['GET', 'POST'])

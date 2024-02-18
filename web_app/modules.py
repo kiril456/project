@@ -15,6 +15,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.String(20))
     budget = db.Column(db.Integer, nullable=False, default=20000)
+    status = db.Column(db.Integer, nullable=False, default=0)
     items = db.relationship("Item", backref='owned_user', lazy=True)
     comments = db.relationship("Comment", backref='comment_user', lazy=True)
 
@@ -25,6 +26,9 @@ class User(db.Model, UserMixin):
     @password.setter
     def password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password)
+    
+    def change_status(self, status):
+        self.status = status
     
     def check_password(self, got_password):
         return bcrypt.check_password_hash(self.password_hash, got_password)
