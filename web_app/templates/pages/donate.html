@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Donate Page
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="d-flex justify-content-center ">
+            <div class="d-flex flex-column mb-3 mt-5 change-block">
+                <h3 class="text-center mb-3">Donate</h3>
+                <form method="post">
+                    {{ form.hidden_tag() }}
+
+                    <div class="form-floating mb-3">
+                        {{ form.cash(class="form-control", id="floatingInput", placeholder="Cash") }}
+                        {{ form.cash.label(for="floatingInput") }}
+                    </div>
+                    <div class="form-floating mb-3">
+                        {{ form.password(class="form-control", id="floatingPassword", placeholder="Password") }}
+                        {{ form.password.label(for="floatingPassword") }}
+                    </div>
+                    <div class="d-md-flex justify-content-md-end">
+                        {{ form.submit(class="btn btn-danger", style="width: 80px;") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -30,7 +30,7 @@
                 <li><a class="dropdown-item" href="{{ url_for('logout_page') }}"><i class="bi bi-box-arrow-right"></i> EXIT</a></li>
               </ul>
             </li>
-            <a href="#" class="nav-link text-success"><i class="bi bi-cash-stack"></i> {{ current_user.budget }} ₴</a>
+            <a href="{{ url_for('get_money_page', user_id=current_user.id) }}" class="nav-link text-success"><i class="bi bi-cash-stack"></i> {{ current_user.budget }} ₴</a>
             <a class="btn btn-outline-primary" href="{{ url_for('logout_page') }}">Log Out</a>
           </div>
         {% endif %}

@@ -51,3 +51,10 @@ class ChangeProfileForm(FlaskForm):
     password = PasswordField('Password:', validators=[DataRequired(), Length(min=4)])
     password_confirm = PasswordField("Confrim Password: ", validators=[EqualTo('password')])
     submit = SubmitField("Save")
+    
+
+class DonateForm(FlaskForm):
+    cash = IntegerField('Cash', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Donate')
+    

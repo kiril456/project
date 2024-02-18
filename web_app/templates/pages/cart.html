@@ -1,29 +1,42 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Cart Page
+Cart Page
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-    <h3 class="text-center mt-4">Items</h3>
-    {% for item in items %}   
-        <div class="get-item">
-            <div class="row">
-                <div class=" col-2">
-                    <img src="data:{{ item.mimetype }};charset=utf-8;base64,{{ encode_image(item.image) }}" alt="{{ item.description }}">
-                </div>
-                <div class="col-6">
-                    <p><strong>Model:</strong> {{ item.description }}</p>
-                </div>
-                <div class="col">
-                    <p><strong>Price:</strong> {{ item.price }} ₴</p>
-                </div>
-                <div class="col">
-                    <p class="text-success"><strong>Status:</strong> Buy</p>
-                </div>
+<div class="container">
+    {% if not items %}
+        <h3 class="text-center mt-5">You don't have any items</h3>
+    {% else %}
+        <h3 class="text-center mt-4">Items</h3>
+        {% for item in items %}
+        <div class="d-flex justify-content-between get-item">
+            <div class="p-2">
+                <img src="data:{{ item.mimetype }};charset=utf-8;base64,{{ encode_image(item.image) }}"
+                    alt="{{ item.description }}">
+            </div>
+            <div class="p-2">
+                <p><strong>Model:</strong> {{ item.description }}</p>
+            </div>
+            <div class="p-2">
+                <p><strong>Price:</strong> {{ item.price }} ₴</p>
+            </div>
+            <div class="p-2">
+                <p class="text-success"><strong>Status:</strong> Buy</p>
+            </div>
+            <div class="p-2">
+                <form method="post">
+                    <input id="sell_item" name="sell_item" type="hidden" value="{{ item.id }}">
+                    <div class="d-grid gap">
+                        <button class="btn btn-outline-danger btn-lg text-center" type="submit"
+                            style="width: 50px; height: 70px; padding: 10px;">Sell</button>
+                    </div>
+                </form>
             </div>
         </div>
-    {% endfor %}
-    </div>
+        {% endfor %}
+    {% endif %}
+
+</div>
 {% endblock %}

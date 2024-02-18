@@ -56,6 +56,11 @@ class Item(db.Model):
         current_user.budget -= self.price
         db.session.commit()
 
+    def sell(self, user):
+        self.owner = None
+        user.budget += self.price
+        db.session.commit()
+
     def __repr__(self):
         return "<Item %r>" % self.description
     

@@ -1,7 +1,7 @@
 from web_app import app, db
 from flask import render_template, url_for, redirect, flash, get_flashed_messages, request, abort
 from flask_login import login_required, current_user
-from web_app.forms import ItemForm, CommentForm, ChangeProfileForm
+from web_app.forms import ItemForm, CommentForm, ChangeProfileForm, DonateForm
 from web_app.modules import Item, Comment, User
 import base64
 
@@ -44,12 +44,24 @@ def home_page():
     return render_template("pages/index.html", items=items, search_items=search_items)
 
 
-@app.route('/cart')
+@app.route('/cart', methods=['GET', 'POST'])
 @login_required
 def cart_page():
     items = Item.query.filter_by(owner=current_user.id).all()
-        
-    return render_template("pages/cart.html", items=items)
+    
+    if request.method == 'POST':
+        item = Item.query.filter_by(id=request.form['sell_item']).first()
+        if item:
+            item.sell(current_user)
+            
+            flash("Item was sold successfully", category="success")
+            
+            return redirect(url_for("home_page"))
+        else:
+            flash("Sorry, you can't sell this item", category="danger")
+    
+    if request.method == 'GET':
+        return render_template("pages/cart.html", items=items)
 
 
 @app.route('/upload', methods=['POST', "GET"])
@@ -155,3 +167,25 @@ def profile_page(name):
     errors_form(form)
              
     return render_template('auth/profile.html', form=form)
+
+
+@app.route('/donate-money/id=<user_id>', methods=['GET', 'POST'])
+def get_money_page(user_id):
+    form = DonateForm()
+    
+    if form.validate_on_submit():
+        cash = form.cash.data
+        password = form.password.data
+        
+        if current_user.check_password(password):
+            current_user.budget += cash
+            db.session.commit()
+            
+            flash("The payment was successfully", category="success")
+            
+            return redirect(url_for('home_page'))
+        else:
+            flash("You entered incorect password. Please try again!", category="info")
+            
+    return render_template("pages/donate.html", form=form)
+        
