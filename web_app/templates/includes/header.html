@@ -1,0 +1,37 @@
+<header class="text-bg-dark">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Shop</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" aria-current="page" href="{{ url_for('home_page') }}"><i class="bi bi-cart3"></i> Items</a>
+          <a class="nav-link" href="{{ url_for('cart_page') }}"><i class="bi bi-bag"></i> Cart</a>
+          
+        </div>
+        {% if not current_user.is_authenticated %}  
+          <div class="navbar-nav">
+            <a class="nav-link" href="{{ url_for('login_page') }}">Sign In</a>
+            <a class="btn btn-outline-primary" href="{{ url_for('register_page') }}">Sign Up</a>
+          </div>
+        {% else %}
+          <div class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle"></i> Welcome, {{ current_user.username }}
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ url_for('profile_page', name=current_user.username) }}"><i class="bi bi-person-lines-fill"></i> PROFILE</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('logout_page') }}"><i class="bi bi-box-arrow-right"></i> EXIT</a></li>
+              </ul>
+            </li>
+            <a href="#" class="nav-link text-success"><i class="bi bi-cash-stack"></i> {{ current_user.budget }} ₴</a>
+            <a class="btn btn-outline-primary" href="{{ url_for('logout_page') }}">Log Out</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+</header>

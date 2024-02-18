@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="data-item">
+            <h2>Data of Items</h2>
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+    
+                {{ form.description.label }}
+    
+                {{ form.description() }}
+    
+                {{ form.price.label }}
+                {{ form.price() }}
+                
+                {{ form.image.label }}
+                {{ form.image() }}
+    
+                {{ form.submit(class="btn btn-success mt-3 btn-lg") }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

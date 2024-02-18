@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile Page
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-center mt-4">
+        <div class="d-flex flex-column change-block">
+            <h3 class="mb-3 text-center">Information</h3>
+            <p class="text-decoration-underline"><strong>Username: </strong>{{ current_user.username }}</p>
+            <p class="text-decoration-underline"><strong>Email: </strong>{{ current_user.email }}</p>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center ">
+        <div class="d-flex flex-column mb-3 mt-5 change-block">
+            <h3 class="mb-3 text-center">Change Profile</h3>
+            <form method="post">
+                {{ form.hidden_tag() }}
+
+                <div class="form-floating mb-3">
+                    {{ form.username(class="form-control", id="floatingInput", placeholder="Username") }}
+                    {{ form.username.label(for="floatingInput") }}
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.password(class="form-control", id="floatingPassword", placeholder="Password") }}
+                    {{ form.password.label(for="floatingPassword") }}
+                </div>
+                <div class="form-floating mb-3">
+                    {{ form.password_confirm(class="form-control", id="floatingConfirmPassword", placeholder="Confirm Password") }}
+                    {{ form.password_confirm.label(for="floatingConfirmPassword") }}
+                </div>
+                <div class="d-md-flex justify-content-md-end">
+                    {{ form.submit(class="btn btn-danger", style="width: 80px;") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

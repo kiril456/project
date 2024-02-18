@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Need Sign In
+{% endblock %}
+
+{% block content %}
+    <div class="not-authenticated">
+        <h3>You don't have any items in your cart.</h3>
+        <h6>Have an account? Sign in to see your items.</h6>
+        <div class="links d-md-block">
+            <a href="{{ url_for('home_page') }}" class="btn btn-outline-primary btn-lg">Start Shoping</a>
+            <a href="{{ url_for('login_page') }}" class="btn btn-primary btn-lg">Sign In</a>
+        </div>
+    </div>
+{% endblock %}

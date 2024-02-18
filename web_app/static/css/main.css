@@ -1,0 +1,160 @@
+.sign_block {
+    background-color: rgb(74, 82, 86);
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 520px;
+    border-radius: 6px;
+}
+
+.sign_block h2 {
+    text-align: center;
+    margin-top: 1em;
+}
+
+.sign {
+    margin-top: 30px;
+    margin-inline: 30px;
+}
+
+.sign p {
+    margin-top: 20px;
+    text-align: center;
+} 
+
+.not-authenticated {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.links a{
+    border-radius: 25px;
+    width: 250px;
+    margin-inline: 10px;
+    margin-top: 10px;
+}
+
+.search-container  {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+
+}
+
+.search-container  form {
+    width: 800px;
+}
+
+.data-item {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 520px;
+    border-radius: 6px;
+    background-color:  rgb(74, 82, 86);
+    color: white;
+}
+
+.data-item form {
+    display: flex;
+    flex-direction: column;
+    margin-inline: 20px;
+}
+
+.data-item form label{
+    margin-top: 20px;
+}
+
+.data-item textarea {
+    height: 150px;
+    resize: none;
+}
+
+.data-item h2 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.item-image img {
+    padding-top: 15px;
+    text-align: center;
+    width: 100%;
+}
+
+.item-image a {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.item-image p {
+    font-size: 14px;
+    text-align: left;
+}
+
+.main-elements {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.category-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.control-page {
+    border: 1px solid rgba(149, 149, 149, 0.719);
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.control-page button {
+    width: 120px;
+}
+
+.get-item {
+    border: 1px solid gray;
+    border-radius: 6px;
+    margin-top: 30px;
+    padding: 15px;
+}
+
+.get-item img {
+    width: 100px;
+}
+
+.submit-comment {
+    position: relative;
+    margin-top: 30px;
+}
+
+.comment-box {
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 7px;
+}
+
+.change-block {
+    border: 1px solid rgb(225, 225, 225);
+    border-radius: 4px;
+    margin: 20px;
+    padding: 20px;
+    width: 600px;
+    min-width: 300px;
+}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home Page
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="search-container">
+        <form method="post">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search for anything"
+                    aria-label="Recipient's username" aria-describedby="button-addon2" name="searched">
+                <button class="btn btn-outline-primary btn-lg" type="submit" id="button-addon2">Search</button>
+            </div>
+        </form>
+    </div>
+    <div class="row text-center justify-content-md-center">
+        <div class="col">
+            <div class="items-block">
+                <div class="row row-cols-3 ">
+                    {% if search_items %}
+                        {% for item in search_items %}
+                        <div class="card m-3 item-image" style="width: 18rem;">
+                            <img src="data:{{ item.mimetype }};charset=utf-8;base64,{{ encode_image(item.image) }}"
+                                class="card-img-top img-fluid" alt="...">
+                            <div class="card-body main-elements">
+                                <p class="card-text">{{ item.description }}</p>
+                                <h6>Price: {{ item.price }} ₴</h6>
+                                <form method="post">
+                                    <input id="purchased_item" name="purchase_item" type="hidden" value="{{ item.id }}">
+                                    <div class="d-grid gap">
+                                        <button class="btn btn-primary d-md-block" type="submit">Buy</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        {% for item in items %}
+                        <div class="card m-3 item-image" style="width: 18rem;">
+                            <img src="data:{{ item.mimetype }};charset=utf-8;base64,{{ encode_image(item.image) }}"
+                                class="card-img-top img-fluid" alt="...">
+                            <div class="card-body main-elements">
+                                <p class="card-text">{{ item.description }}</p>
+                                <h6>Price: {{ item.price }} ₴</h6>
+                                <form method="post">
+                                    <input id="purchased_item" name="purchase_item" type="hidden" value="{{ item.id }}">
+                                    <div class="d-grid gap">
+                                        <button class="btn btn-primary" type="submit">Buy</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

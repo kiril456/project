@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Sign Up
+{% endblock %}
+
+{% block content %}
+    <div class="container bg-dark">
+        <div class="sign_block">
+            <h2>Sign Up</h2>
+            <form method="post" class="sign">
+                {{ form.hidden_tag() }}
+
+                {{ form.name.label }}
+                {{ form.name(class="form-control") }}
+
+                {{ form.email.label }}
+                {{ form.email(class="form-control") }}
+
+                {{ form.password.label }}
+                {{ form.password(class="form-control") }}
+
+                {{ form.password_confirm.label }}
+                {{ form.password_confirm(class="form-control") }}
+
+                <div class="d-grid gap-1">
+                    {{ form.submit(class="btn btn-outline-success mt-4") }}
+                </div>
+
+                <p>Already have an account? <a href="{{ url_for('login_page') }}">Sign In</a> </p>
+            </form>
+        </div>
+    </div>
+{% endblock %}
