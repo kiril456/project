@@ -16,8 +16,8 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(20))
     budget = db.Column(db.Integer, nullable=False, default=20000)
     status = db.Column(db.Integer, nullable=False, default=0)
-    items = db.relationship("Item", backref='owned_user', lazy=True)
     comments = db.relationship("Comment", backref='comment_user', lazy=True)
+    transaction = db.relationship("Transaction", backref='user_transaction', lazy=True)
 
     @property
     def password(self):
@@ -48,16 +48,17 @@ class Item(db.Model):
     price = db.Column(db.Integer, nullable=False)
     image = db.Column(db.Text, nullable=False)
     mimetype = db.Column(db.Text, nullable=False)
-    owner = db.Column(db.Integer(), db.ForeignKey('user.id'))
+    amount = db.Column(db.Integer)
     author_comment = db.relationship("Comment", backref="com_item", lazy=True)
+    transaction = db.relationship("Transaction", backref="transaction_item", lazy=True)
     
     def buy(self, current_user):
-        self.owner = current_user.id
+        self.amount -= 1
         current_user.budget -= self.price
         db.session.commit()
 
     def sell(self, user):
-        self.owner = None
+        self.amount += 1
         user.budget += self.price
         db.session.commit()
 
@@ -91,3 +92,20 @@ class Comment(db.Model):
         
     def __repr__(self):
         return f'<Comment {self.comment}>'
+    
+
+class Transaction(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cost = db.Column(db.Integer, nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.String, nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
+    def add_transaction(self):
+        db.session.add(self)
+        db.session.commit()
+    
+    def __repr__(self): 
+        return f"<Transaction: user_id={self.user_id}>, item_id={self.item_id}, status={self.status}"
+    

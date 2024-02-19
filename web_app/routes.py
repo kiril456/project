@@ -2,7 +2,7 @@ from web_app import app, db
 from flask import render_template, url_for, redirect, flash, get_flashed_messages, request, abort
 from flask_login import login_required, current_user
 from web_app.forms import ItemForm, CommentForm, ChangeProfileForm, DonateForm
-from web_app.modules import Item, Comment, User
+from web_app.modules import Item, Comment, User, Transaction
 import base64
 
 
@@ -23,7 +23,7 @@ def utility_processor():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/home', methods=['GET', 'POST'])
 def home_page():
-    items = Item.query.filter_by(owner=None).all()
+    items = Item.query.all()
     search_items = []
     
     # Form for get id from card of item
@@ -38,7 +38,6 @@ def home_page():
         search_data = request.form['searched']
 
         search_items = search_items.filter(Item.description.like("%" + search_data + "%"))
-        search_items = search_items.filter_by(owner=None)
         search_items = search_items.order_by(Item.description).all()
         
     return render_template("pages/index.html", items=items, search_items=search_items)
@@ -47,12 +46,16 @@ def home_page():
 @app.route('/cart', methods=['GET', 'POST'])
 @login_required
 def cart_page():
-    items = Item.query.filter_by(owner=current_user.id).all()
-    
     if request.method == 'POST':
         item = Item.query.filter_by(id=request.form['sell_item']).first()
         if item:
+            transaction = Transaction(cost=item.price, status="sell", 
+                                              item_id=item.id, user_id=current_user.id)
             item.sell(current_user)
+            transaction.add_transaction()
+            
+            Transaction.query.filter(Transaction.item_id==item.id or Transaction.status=="buy").delete()
+            db.session.commit()
             
             flash("Item was sold successfully", category="success")
             
@@ -61,7 +64,9 @@ def cart_page():
             flash("Sorry, you can't sell this item", category="danger")
     
     if request.method == 'GET':
-        return render_template("pages/cart.html", items=items)
+        transactions = Transaction.query.filter(Transaction.user_id==current_user.id or Transaction.status=="buy").all()
+        items = [Item.query.filter_by(id=transaction.item_id).first() for transaction in transactions]
+        return render_template("pages/cart.html", items=items, transactions=transactions)
 
 
 @app.route('/upload', methods=['POST', "GET"])
@@ -112,11 +117,17 @@ def item_page(item_id):
         if item:
             if current_user.budget >= item.price:
                 # user buy an item
-                item.buy(current_user)
+                if item.amount > 0:
+                    transaction = Transaction(cost=item.price, status="buy", 
+                                              item_id=item.id, user_id=current_user.id)
+                    item.buy(current_user)
+                    transaction.add_transaction()
+                    
+                    flash(f"'{item.description}' was bought!", category="success")
                 
-                flash(f"'{item.description}' was bought!", category="success")
-                
-                return redirect(url_for('cart_page'))
+                    return redirect(url_for('cart_page'))
+                else:
+                    flash("Sorry, this item is not available for now", category="info")
             else:
                 flash("You don't have enough money to buy it!", category="info")
         else:
@@ -169,8 +180,8 @@ def profile_page(name):
     return render_template('auth/profile.html', form=form)
 
 
-@app.route('/donate-money/id=<user_id>', methods=['GET', 'POST'])
-def get_money_page(user_id):
+@app.route('/donate-money/username=<username>', methods=['GET', 'POST'])
+def get_money_page(username):
     form = DonateForm()
     
     if form.validate_on_submit():

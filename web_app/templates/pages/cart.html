@@ -10,24 +10,24 @@ Cart Page
         <h3 class="text-center mt-5">You don't have any items</h3>
     {% else %}
         <h3 class="text-center mt-4">Items</h3>
-        {% for item in items %}
+        {% for index in range(items|length) %}
         <div class="d-flex justify-content-between get-item">
             <div class="p-2">
-                <img src="data:{{ item.mimetype }};charset=utf-8;base64,{{ encode_image(item.image) }}"
-                    alt="{{ item.description }}">
+                <img src="data:{{ items[index].mimetype }};charset=utf-8;base64,{{ encode_image(items[index].image) }}"
+                    alt="{{ items[index].description }}">
             </div>
             <div class="p-2">
-                <p><strong>Model:</strong> {{ item.description }}</p>
+                <p><strong>Model:</strong> {{ items[index].description }}</p>
             </div>
             <div class="p-2">
-                <p><strong>Price:</strong> {{ item.price }} ₴</p>
+                <p><strong>Price:</strong> {{ items[index].price }} ₴</p>
             </div>
             <div class="p-2">
-                <p class="text-success"><strong>Status:</strong> Buy</p>
+                <p class="text-success"><strong>Status:</strong> {{ transactions[index].status }}</p>
             </div>
             <div class="p-2">
                 <form method="post">
-                    <input id="sell_item" name="sell_item" type="hidden" value="{{ item.id }}">
+                    <input id="sell_item" name="sell_item" type="hidden" value="{{ items[index].id }}">
                     <div class="d-grid gap">
                         <button class="btn btn-outline-danger btn-lg text-center" type="submit"
                             style="width: 50px; height: 70px; padding: 10px;">Sell</button>

@@ -44,6 +44,11 @@ Home Page
                             <div class="card-body main-elements">
                                 <p class="card-text">{{ item.description }}</p>
                                 <h6>Price: {{ item.price }} ₴</h6>
+                                {% if item.amount > 0 %}
+                                    <p class="text-success">Is available</p> 
+                                {% else %}
+                                    <p class="text-danger">Is not available</p>    
+                                {% endif %}
                                 <form method="post">
                                     <input id="purchased_item" name="purchase_item" type="hidden" value="{{ item.id }}">
                                     <div class="d-grid gap">
