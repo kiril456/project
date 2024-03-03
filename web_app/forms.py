@@ -32,8 +32,17 @@ class LoginForm(FlaskForm):
 class ItemForm(FlaskForm):
     description = TextAreaField("Description of item", validators=[DataRequired()])
     price = IntegerField("Price of item", validators=[DataRequired()])
+    amount = IntegerField("Amount of item", validators=[DataRequired()])
     image = FileField("Image of item", validators=[FileRequired()])
-    submit = SubmitField("Send")
+    submit = SubmitField("Save")
+    
+    def validate_amount(self, number):
+        if number.data < 0:
+            raise ValidationError("You cann't sent a negative amount of item")
+        
+    def validate_price(self, field):
+        if field.data < 0:
+            raise ValidationError("You cann't sent a negative price")
     
     
 class BuyForm(FlaskForm):

@@ -28,7 +28,7 @@ def register_page():
 @app.route('/login', methods=['POST', 'GET'])
 def login_page():
     form = LoginForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and not current_user.is_authenticated:
         user = User.query.filter_by(username=form.name.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
@@ -50,10 +50,10 @@ def login_page():
 def login_view():
     return render_template('auth/login_view.html')
 
+
 @app.route('/logout')
 @login_required
 def logout_page():
     logout_user()
     flash("You have been logged out", category="success")
     return redirect(url_for('home_page'))
-

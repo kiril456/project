@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Edit Page
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        
+        <div class="row row-cols-2 mt-5">
+            <div class="col admin-item-block">
+                <div class="d-flex flex-column mb-3">
+                    <div class="p-2">
+                        <img src="data:{{ item.mimetype }};charset=utf-8;base64,{{ encode_image(item.image) }}"
+                             alt="{{ item.description }}" class="img-thumbnail">
+                    </div>
+                    <div class="p-2">
+                        <p><span><strong>Description: </strong></span>{{ item.description }}</p>
+                    </div>
+                    <div class="p-2">
+                        <p><span><strong>Price: </strong></span>{{ item.price }}</p>
+                    </div>
+                    <div class="p-2">
+                        <p><span><strong>Amount: </strong></span>{{ item.amount }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col change-data-item">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="d-flex flex-column mb-3">
+                        {{ form.hidden_tag() }}
+            
+                        <div class="form-floating">
+                            {{ form.description(class="form-control", placeholder="Leave a comment here", id="floatingTextarea", style="height: 170px") }}
+                            {{ form.description.label(for="floatingTextarea") }}
+                        </div>
+                        <div class="form-floating">
+                            {{ form.price(class="form-control", placeholder="Price of item", id="floatingPrice") }}
+                            {{ form.price.label(for="floatingPrice") }}
+                        </div>
+                        <div class="form-floating">
+                            {{ form.amount(class="form-control", placeholder="Amount of item", id="floatingAmount") }}
+                            {{ form.amount.label(for="floatingAmount") }}
+                        </div>
+                        <div class="p-2">
+                            {{ form.image() }}
+                        </div>        
+                        {{ form.submit(class="btn btn-success mt-3 btn-lg mt-3") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

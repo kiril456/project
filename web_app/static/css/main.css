@@ -61,7 +61,7 @@
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     width: 400px;
-    height: 520px;
+    height: 550px;
     border-radius: 6px;
     background-color:  rgb(74, 82, 86);
     color: white;
@@ -78,7 +78,7 @@
 }
 
 .data-item textarea {
-    height: 150px;
+    height: 120px;
     resize: none;
 }
 
@@ -157,4 +157,32 @@
     padding: 20px;
     width: 600px;
     min-width: 300px;
+}
+
+.admin-item-block {
+    border: 1px solid rgb(205, 205, 205);
+    max-width: 500px;
+    min-width: 300px;
+    margin-right: 100px;
+
+}
+
+.admin-item-block span {
+    font-size: 18px;
+}
+
+.change-data-item {
+    border: 1px solid rgb(205, 205, 205);
+    max-width: 500px;
+    min-width: 300px;
+    padding-top: 30px;
+}
+
+.change-data-item div {
+    padding-bottom: 20px;
+}
+
+.change-data-item div textarea {
+    height: 300px;
+    resize: none;
 }

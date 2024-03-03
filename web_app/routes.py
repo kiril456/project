@@ -26,20 +26,35 @@ def home_page():
     items = Item.query.all()
     search_items = []
     
-    # Form for get id from card of item
-    if request.method == "POST" and ('purchase_item' in request.form):
+    if request.form.get('action') == 'Buy':
+        # Form for get id from card of item
         item_id = request.form['purchase_item']
 
         return redirect(url_for('item_page', item_id=item_id))
-    
-    # Search form for items
-    if request.method == "POST" and ('searched' in request.form):
+    elif 'searched' in request.form:
+        # Search items
         search_items = Item.query
         search_data = request.form['searched']
 
         search_items = search_items.filter(Item.description.like("%" + search_data + "%"))
         search_items = search_items.order_by(Item.description).all()
         
+    elif request.form.get('action') == 'Edit':
+        # Edit items
+        item_id = request.form['purchase_item']
+        return redirect(url_for('edit_page', item_id=item_id))
+    
+    elif request.form.get('action') == 'Delete':
+        # Delete items
+        item_id = request.form.get('delete_item')
+        
+        Item.query.filter(Item.id==item_id).delete(synchronize_session='fetch')
+        db.session.commit()
+            
+        flash("Item was deleted!", category="success")
+        
+        return redirect(url_for('home_page'))
+
     return render_template("pages/index.html", items=items, search_items=search_items)
 
 
@@ -54,7 +69,8 @@ def cart_page():
             item.sell(current_user)
             transaction.add_transaction()
             
-            Transaction.query.filter(Transaction.item_id==item.id or Transaction.status=="buy").delete()
+            obj = Transaction.query.filter(Transaction.item_id==item.id or Transaction.status=="buy").first()
+            db.session.delete(obj)
             db.session.commit()
             
             flash("Item was sold successfully", category="success")
@@ -69,7 +85,7 @@ def cart_page():
         return render_template("pages/cart.html", items=items, transactions=transactions)
 
 
-@app.route('/upload', methods=['POST', "GET"])
+@app.route('/admin/upload', methods=['POST', "GET"])
 @login_required
 def upload():
     if current_user.status == 1:
@@ -80,6 +96,7 @@ def upload():
             description = form.description.data
             price = form.price.data
             pic = form.image.data
+            amount = form.amount.data
             
             if not pic:
                 return "No pic uploaded", 400
@@ -87,7 +104,7 @@ def upload():
             mimetype = pic.mimetype
             
             # Add item in database 
-            item = Item(description=description, price=price, image=pic.read(), mimetype=mimetype)
+            item = Item(description=description, price=price, image=pic.read(), mimetype=mimetype, amount=amount)
             db.session.add(item)
             db.session.commit()
             
@@ -98,6 +115,44 @@ def upload():
         return render_template('admin/upload.html', form=form)
     
     return redirect(url_for('home_page'))
+
+
+@app.route('/admin/edit/item_id=<int:item_id>', methods=['GET', 'POST'])
+@login_required
+def edit_page(item_id):
+    form = ItemForm()
+    item = Item.query.filter_by(id=item_id).first()
+    
+    if form.validate_on_submit():
+        description = form.description.data
+        price = form.price.data
+        amount = form.amount.data
+        image = form.image.data
+        
+        if not image:
+            return "No pic uploaded", 400
+        
+        mimetype = image.mimetype
+        
+        # Change data of item
+        try:
+            item.description = description
+            item.price = price    
+            item.image = image.read()
+            item.mimetype = mimetype
+            item.amount = amount
+        except:
+            flash("Sorry something wrong", category="danger")
+        else:
+            db.session.commit()
+        
+        flash("Changes was successsful", category="success")
+        
+        return redirect(url_for('edit_page', item_id=item_id))
+        
+    errors_form(form)
+    
+    return render_template('admin/edit.html', form=form, item=item)
 
 
 @app.route('/item/id=<int:item_id>', methods=['GET', 'POST'])

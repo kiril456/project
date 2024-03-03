@@ -21,42 +21,11 @@ Home Page
                 <div class="row row-cols-3 ">
                     {% if search_items %}
                         {% for item in search_items %}
-                        <div class="card m-3 item-image" style="width: 18rem;">
-                            <img src="data:{{ item.mimetype }};charset=utf-8;base64,{{ encode_image(item.image) }}"
-                                class="card-img-top img-fluid" alt="...">
-                            <div class="card-body main-elements">
-                                <p class="card-text">{{ item.description }}</p>
-                                <h6>Price: {{ item.price }} ₴</h6>
-                                <form method="post">
-                                    <input id="purchased_item" name="purchase_item" type="hidden" value="{{ item.id }}">
-                                    <div class="d-grid gap">
-                                        <button class="btn btn-primary d-md-block" type="submit">Buy</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                            {% include 'includes/card.html' %}
                         {% endfor %}
                     {% else %}
                         {% for item in items %}
-                        <div class="card m-3 item-image" style="width: 18rem;">
-                            <img src="data:{{ item.mimetype }};charset=utf-8;base64,{{ encode_image(item.image) }}"
-                                class="card-img-top img-fluid" alt="...">
-                            <div class="card-body main-elements">
-                                <p class="card-text">{{ item.description }}</p>
-                                <h6>Price: {{ item.price }} ₴</h6>
-                                {% if item.amount > 0 %}
-                                    <p class="text-success">Is available</p> 
-                                {% else %}
-                                    <p class="text-danger">Is not available</p>    
-                                {% endif %}
-                                <form method="post">
-                                    <input id="purchased_item" name="purchase_item" type="hidden" value="{{ item.id }}">
-                                    <div class="d-grid gap">
-                                        <button class="btn btn-primary" type="submit">Buy</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                            {% include 'includes/card.html' %}
                         {% endfor %}
                     {% endif %}
                 </div>
@@ -64,4 +33,5 @@ Home Page
         </div>
     </div>
 </div>
+
 {% endblock %}

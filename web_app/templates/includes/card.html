@@ -1,0 +1,26 @@
+{% include 'includes/modals.html' %}
+<div class="card m-3 item-image" style="width: 18rem;">
+    <img src="data:{{ item.mimetype }};charset=utf-8;base64,{{ encode_image(item.image) }}"
+        class="card-img-top img-fluid" alt="...">
+    <div class="card-body main-elements">
+        <p class="card-text">{{ item.description }}</p>
+        <h6>Price: {{ item.price }} ₴</h6>
+        {% if item.amount > 0 %}
+            <p class="text-success">Is available</p>
+        {% else %}
+            <p class="text-danger">Is not available</p>
+        {% endif %}
+        <form method="post">
+            <input id="purchased_item" name="purchase_item" type="hidden" value="{{ item.id }}">
+            <div class="d-grid gap">
+                {% if current_user.status == 1 %}
+                    <input class="btn btn-info mb-2" type="submit" name="action" value="Edit">
+                    <input type="button" class="btn btn-danger" data-bs-toggle="modal" value="Delete"
+                    data-bs-target="#Modal-SellingConfirm-{{ item.id }}">
+                {% else %}
+                    <input class="btn btn-primary" type="submit" name="action" value="Buy">
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>

@@ -8,7 +8,9 @@
       <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-link" aria-current="page" href="{{ url_for('home_page') }}"><i class="bi bi-cart3"></i> Items</a>
-          <a class="nav-link" href="{{ url_for('cart_page') }}"><i class="bi bi-bag"></i> Cart</a>
+          {% if current_user.status != 1 %}
+            <a class="nav-link" href="{{ url_for('cart_page') }}"><i class="bi bi-bag"></i> Cart</a>
+          {% endif %}
           {% if current_user.status == 1 %}
             <a class="nav-link" href="{{ url_for('upload') }}"><i class="bi bi-key"></i> Admin Panel</a>
           {% endif %}
